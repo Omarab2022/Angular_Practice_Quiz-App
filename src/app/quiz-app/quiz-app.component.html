@@ -1,0 +1,77 @@
+<div class="start_btn" ><button (click)="showwarningPopup()">Let's Goo</button></div>
+
+
+<div class="info_box" [ngClass]="  showWarning ? 'activeInfo' : '' " ><!-- -->
+    <div class="info_title">
+        some rules of this quiz
+    </div>
+    <div class="info-list">
+        <div class="info"> 1 : you will have only <span> 10 second</span> peer each question</div>
+        <div class="info"> 2 : once you choose answer</div>
+        <div class="info">3 : once you choose answer</div>
+        <div class="info">4 : once you choose answer</div>
+    </div>
+    <div class="buttons">
+        <button class="quit" (click)="quitwwarningPopup()" > Exit Quiz</button>
+        <button class="restart" (click)="startquiz()">Begin</button>
+    </div>
+</div>
+
+<div class="quiz_box" [ngClass]=" isQuizStarted ? 'activeQuiz': ''">
+    <header>
+        <div class="tilte">Quiz app</div>
+        <div class="timer">
+            <div class="time_left_txt">
+                Time off
+            </div>
+            <div class="timer_sec">
+               {{remainingtime}}
+            </div>
+        </div>
+        <div class="time_line" style="width: 550px;"></div>
+    </header>
+
+    <section *ngIf="isQuizStarted">
+        <div class="que_text">
+            <span> {{CurrentQestionNumber}} : {{questionList[CurrentQestionNumber-1].question}}</span>
+        </div>
+        <div class="option_list">
+
+            <div class="option" (click)="selectoption(option)" 
+                 *ngFor="let option of questionList[CurrentQestionNumber-1].options "
+                 [ngClass]="{
+                 'disabled' : isOptionSelected(questionList[CurrentQestionNumber-1].options ),
+                 'correct' : option.isSelected != undefined && option.isCorrect ,
+                 'incorrect' : option.isSelected != undefined && !option.isCorrect }"> 
+
+                <span>{{option.answer}}</span>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="total_que">
+            <span><p>{{CurrentQestionNumber}}</p> of <p> {{ questionList.length}}</p> Questions</span>
+        </div>
+        <button  *ngIf="CurrentQestionNumber == questionList.length" class="next_btn show" (click)="ending()"> End</button>
+        <button *ngIf="CurrentQestionNumber !== questionList.length" class="next_btn show" (click)="nextQuestion()"> Next</button>
+    </footer>
+</div>
+
+<div class="result_box " [ngClass]=" isQuizEnd? 'activeResult' : ''">
+    <div class="icon">
+        <i class="fas fa-crown" ></i>
+    </div>
+    <div class="complete_text">
+        you've completed the test 
+    </div>
+    <div class="score_text" *ngIf="zeroAnswer ==false" >
+<span>Congraaats ! , you got <p>{{correctAnswerCount}}</p> of <p>{{questionList.length}}</p> </span>
+    </div>
+    <div class="score_text" *ngIf="zeroAnswer ==true" >
+        <span> We sorry! , you got <p>{{correctAnswerCount}}</p> of <p>{{questionList.length}}</p> </span>
+            </div>
+    <div class="buttons">
+        <button (click)="replay()">replay quiz</button>
+        <button (click)="start()">quit quiz</button>
+    </div>
+</div>
